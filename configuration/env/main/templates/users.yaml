@@ -1,0 +1,19 @@
+kind: Secret # FIXME only for testing, should be SealedSecret or ExternalSecret
+apiVersion: v1
+metadata:
+  name: admin-user
+data:
+  password: cmVhbGx5c3Ryb25n
+  username: aGVsbG8td29ybGQ=
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: User
+metadata:
+  name: admin-user
+spec:
+  tags:
+  - administrator # other available tags are 'management', 'policymaker', 'monitoring'
+  rabbitmqClusterReference:
+    name: rmq-{{ .Values.env }}
+  importCredentialsSecret:
+    name: admin-user
